@@ -27,7 +27,9 @@ function authenticate(name, pass, fn) {
 }
 
 exports.login = function(req, res) {
-  authenticate(req.query.username, req.query.password, function (err, user) {
+  console.log(req.body.values );
+  authenticate(req.body.values.username, req.body.values.password,
+      function (err, user) {
     if (err) {
       res.send(err);
     }
@@ -35,18 +37,11 @@ exports.login = function(req, res) {
     if (user) {
           res.json(user);
       } else {
-          res.send(err);
+        console.log('nodobdy here'); 
       }
   });
 };
 
-exports.list_all_users = function(req, res) {
-  User.find({}, function(err, user) {
-    if (err)
-      res.send(err);
-    res.json(user);
-  });
-};
 
 exports.create_a_user = function(req, res) {
   // console.log(req,res);
@@ -59,30 +54,3 @@ exports.create_a_user = function(req, res) {
   });
 };
 
-exports.read_a_user = function(req, res) {
-  User.findById(req.params.userId, function(err, user) {
-    if (err)
-      res.send(err);
-    res.json(user);
-  });
-};
-
-
-exports.update_a_user = function(req, res) {
-  User.findOneAndUpdate({_id: req.params.userId}, req.body, {new: true}, function(err, user) {
-    if (err)
-      res.send(err);
-    res.json(user);
-  });
-};
-
-
-exports.delete_a_user = function(req, res) {
-  User.remove({
-    _id: req.params.userId
-  }, function(err, user) {
-    if (err)
-      res.send(err);
-    res.json({ message: 'User successfully deleted' });
-  });
-};

@@ -1,23 +1,28 @@
 var express = require('express'),
   app = express(),
-  port = process.env.PORT || 3002;
   mongoose = require('mongoose'),
-//  Task = require('./api/models'), //created model loading here
   User = require('./api/models/user'), //created model loading here
-  bodyParser = require('body-parser');
+  bodyParser = require('body-parser'),
+  cors = require('cors');
 
 require('dotenv').config();
 
 // mongoose instance connection url connection
 var mongoDB = "mongodb://" + process.env.MONGODBUSER + ":" + process.env.MONGODBPASSWORD + process.env.MONGODB
+  port = process.env.API_PORT;
 
 mongoose.Promise = global.Promise;
 mongoose.connect(mongoDB);
 
+var corsOptions = {
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200
+}
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+app.use(cors(corsOptions));
 
 var routes = require('./api/routes'); //importing route
 routes(app); //register the route
